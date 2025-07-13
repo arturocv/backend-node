@@ -3,10 +3,7 @@ const WorkModel = require('../models/WorkModel');
 
 const showWorks = async (req, res = response) => {
     const works = await WorkModel.find();
-    res.json({
-        // ok:true,
-        works
-    });
+    res.json(works);
 }
 
 const createWorks = async(req, res = response) => {
@@ -24,6 +21,20 @@ const createWorks = async(req, res = response) => {
         return res.status(500).json({
             ok: false,
             msg: 'Error al crear la tarea.'
+        });
+    }
+}
+
+const getWorksById = async(req, res = response) => {
+    const workId = req.params.id;
+    try {
+        const work = await WorkModel.findById( workId );
+        res.json(work);
+    } catch (error) {
+        console.log(error);        
+        res.status(500).json({
+            ok: false,
+            msg: 'La tarea no existe.'
         });
     }
 }
@@ -85,12 +96,10 @@ const deleteWorks = async(req, res = response) => {
     } 
 }
 
-
-
-
 module.exports = {
     showWorks,
     createWorks,
     updateWorks,
-    deleteWorks
+    deleteWorks,
+    getWorksById
 }
